@@ -3,11 +3,16 @@ require('dotenv').config();
 
 const conectarDB = async () => {
     try {
-        await mongoose.connect(process.env.DB_MONGO, {
+        const dbUri = process.env.DB_MONGO;
+        console.log('DB_MONGO:', dbUri); // Verificar la URI
+        if (!dbUri) {
+            throw new Error('La URI de MongoDB no está definida en las variables de entorno');
+        }
+        await mongoose.connect(dbUri, {
         });
         console.log('Base de datos conectada');
     } catch (error) {
-        console.log(error);
+        console.error('Error al conectar a la base de datos:', error.message);
         process.exit(1);
     }
 };
