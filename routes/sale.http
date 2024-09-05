@@ -1,0 +1,98 @@
+### Agregar un producto al carrito
+POST http://localhost:4000/api/carrito/agregar
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMTQ1MiwiZXhwIjoxNzI1NTY5MDUyfQ.YoaOtTmMdOIUIpPyvMcTZrVXONvbmdUWI8nsOiCgTkA
+
+{
+    "userId": "66d91aa9bbbcab8a14e52649",
+    "productoId": "66d92af9d91d0f311aaf48a6",
+    "cantidad": 1
+}
+
+### Ver el carrito de un usuario
+GET http://localhost:4000/api/carrito/ver/66d91aa9bbbcab8a14e52649
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMTQ1MiwiZXhwIjoxNzI1NTY5MDUyfQ.YoaOtTmMdOIUIpPyvMcTZrVXONvbmdUWI8nsOiCgTkA
+
+### Eliminar un producto del carrito
+DELETE http://localhost:4000/api/carrito/eliminar/66bc0cbe417efa48a7443e27
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMTQ1MiwiZXhwIjoxNzI1NTY5MDUyfQ.YoaOtTmMdOIUIpPyvMcTZrVXONvbmdUWI8nsOiCgTkA
+
+{
+    "productoId": "66bafde43ba72ba9029f889e"
+}
+
+
+### Realizar una venta
+POST http://localhost:4000/api/carrito/vender/66d91aa9bbbcab8a14e52649
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMjk2OSwiZXhwIjoxNzI1NTcwNTY5fQ.dzJB7IpMnexZOYvB-EFHEdgbaSxi2qeo4d--pR1JqAQ
+
+{
+    "items": [
+    {
+      "product": {
+        "_id": "66d92af9d91d0f311aaf48a6",
+        "nombre": "Palomitas Extra",
+        "categoria": "66d929446f1a837b97a49f96",
+        "precio": 32,
+        "descripcion": "palomitas Chicas",
+        "imagen": "/images/productos/1725509643421-descarga1.jpeg",
+        "cantidad": 124,
+        "estado": "activo",
+        "fechaCreacion": "2024-09-05T03:52:25.805Z",
+        "__v": 0
+      },
+      "quantity": 3
+    },
+    {
+      "product": {
+        "_id": "66d9300bb42343e6b58a05dd",
+        "nombre": "Palomitas Medianas",
+        "categoria": "66d929446f1a837b97a49f96",
+        "precio": 18,
+        "descripcion": "palomitas Chicas",
+        "imagen": "/images/productos/1725509643421-descarga1.jpeg",
+        "cantidad": 48,
+        "estado": "activo",
+        "fechaCreacion": "2024-09-05T04:14:03.520Z",
+        "__v": 0
+      },
+      "quantity": 5
+    }
+  ]
+}
+
+GET http://localhost:4000/api/carrito/ventas/66bbf25f417efa48a7443deb
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMTQ1MiwiZXhwIjoxNzI1NTY5MDUyfQ.YoaOtTmMdOIUIpPyvMcTZrVXONvbmdUWI8nsOiCgTkA
+
+
+### Obtener todas las ventas
+GET http://localhost:4000/api/carrito/ventas
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMjk2OSwiZXhwIjoxNzI1NTcwNTY5fQ.dzJB7IpMnexZOYvB-EFHEdgbaSxi2qeo4d--pR1JqAQ
+
+### Obtener una venta por ID
+GET http://localhost:4000/api/carrito/ventas/66d93dc9bf8edb20096fb7b1
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMjk2OSwiZXhwIjoxNzI1NTcwNTY5fQ.dzJB7IpMnexZOYvB-EFHEdgbaSxi2qeo4d--pR1JqAQ
+
+###
+POST http://localhost:4000/api/carrito/vender/66d91aa9bbbcab8a14e52649
+Content-Type: application/json
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMjk2OSwiZXhwIjoxNzI1NTcwNTY5fQ.dzJB7IpMnexZOYvB-EFHEdgbaSxi2qeo4d--pR1JqAQ
+
+{
+    "items": [
+        {
+            "productId": "66d92af9d91d0f311aaf48a6",
+            "quantity": 5
+        },
+        {
+            "productId": "66d9300bb42343e6b58a05dd",
+            "quantity": 1
+        }
+    ]
+}
