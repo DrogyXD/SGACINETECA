@@ -32,6 +32,7 @@ const uploadProductos = multer({
     limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
     fileFilter: fileFilterProductos
 });
+
 // Rutas para productos
 router.get('/', productoController.obtenerProductos);
 router.get('/:id', productoController.obtenerProducto);

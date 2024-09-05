@@ -3,11 +3,12 @@ const fs = require('fs');
 const Producto = require('../models/product');
 
 // URL base para las imágenes
-const BASE_URL = 'https://sgacineteca-production.up.railway.app/images/productos/';
+const BASE_URL = 'https://sgacineteca-production.up.railway.app';
 
 // Función auxiliar para construir la URL de la imagen
 const asset = (imagePath) => {
-    return imagePath ? `${BASE_URL}${imagePath}` : null;
+    // Elimina cualquier duplicado de '/images/productos/' en la ruta
+    return imagePath ? `${BASE_URL}${imagePath.replace(/\/+images\/productos\//, '/images/productos/')}` : null;
 };
 
 // Obtener un producto por ID
@@ -67,7 +68,7 @@ exports.crearProducto = async (req, res) => {
 
         let imagenPath = '';
         if (req.file) {
-            imagenPath = req.file.filename;
+            imagenPath = `/images/productos/${req.file.filename}`;
         }
 
         const producto = new Producto({
@@ -104,7 +105,7 @@ exports.actualizarProducto = async (req, res) => {
         }
 
         if (req.file) {
-            producto.imagen = req.file.filename;
+            producto.imagen = `/images/productos/${req.file.filename}`;
         }
 
         producto.nombre = nombre || producto.nombre;
