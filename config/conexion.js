@@ -4,7 +4,6 @@ require('dotenv').config();
 const conectarDB = async () => {
     try {
         const dbUri = process.env.DB_MONGO;
-        console.log('DB_MONGO:', dbUri); // Verificar la URI
         if (!dbUri) {
             throw new Error('La URI de MongoDB no está definida en las variables de entorno');
         }

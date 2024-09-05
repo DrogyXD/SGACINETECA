@@ -2,6 +2,14 @@ const path = require('path');
 const fs = require('fs');
 const Producto = require('../models/product');
 
+// URL base para las imágenes
+const BASE_URL = 'https://sgacineteca-production.up.railway.app/images/productos/';
+
+// Función auxiliar para construir la URL de la imagen
+const asset = (imagePath) => {
+    return imagePath ? `${BASE_URL}${imagePath}` : null;
+};
+
 // Obtener un producto por ID
 exports.obtenerProducto = async (req, res) => {
     try {
@@ -11,9 +19,9 @@ exports.obtenerProducto = async (req, res) => {
             return res.status(404).json({ msg: 'No existe el producto' });
         }
 
-        // Dejar la ruta de la imagen tal como está
+        // Asignar la URL completa de la imagen
         if (producto.imagen) {
-            producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
+            producto.imagen = asset(producto.imagen);
         }
 
         res.json(producto);
@@ -28,10 +36,10 @@ exports.obtenerProductos = async (req, res) => {
     try {
         const productos = await Producto.find({ estado: 'activo' }).populate('categoria');
 
-        // Dejar las rutas de las imágenes tal como están
+        // Asignar la URL completa de las imágenes
         const productosConUrl = productos.map(producto => {
             if (producto.imagen) {
-                producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
+                producto.imagen = asset(producto.imagen);
             }
             return producto;
         });
@@ -48,24 +56,20 @@ exports.crearProducto = async (req, res) => {
     try {
         const { nombre, categoria, precio, cantidad, descripcion } = req.body;
 
-        // Verificar si el producto ya existe
         let productoExistente = await Producto.findOne({ nombre });
         if (productoExistente) {
             return res.status(400).json({ msg: 'El producto ya existe' });
         }
 
-        // Validar datos requeridos
         if (!nombre || !categoria || !precio || cantidad === undefined) {
             return res.status(400).json({ msg: 'Todos los campos son requeridos' });
         }
 
-        // Construir el path de la imagen si existe
         let imagenPath = '';
         if (req.file) {
-            imagenPath = `/images/productos/${req.file.filename}`;
+            imagenPath = req.file.filename;
         }
 
-        // Crear un nuevo producto
         const producto = new Producto({
             nombre,
             categoria,
@@ -78,9 +82,8 @@ exports.crearProducto = async (req, res) => {
 
         await producto.save();
 
-        // Dejar la URL de la imagen tal como está
         if (producto.imagen) {
-            producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
+            producto.imagen = asset(producto.imagen);
         }
 
         res.status(201).json(producto);
@@ -101,7 +104,7 @@ exports.actualizarProducto = async (req, res) => {
         }
 
         if (req.file) {
-            producto.imagen = `/images/productos/${req.file.filename}`; // Corrigiendo el path
+            producto.imagen = req.file.filename;
         }
 
         producto.nombre = nombre || producto.nombre;
@@ -113,30 +116,10 @@ exports.actualizarProducto = async (req, res) => {
 
         producto = await Producto.findByIdAndUpdate(req.params.id, producto, { new: true }).populate('categoria');
 
-        // Dejar la URL de la imagen tal como está
         if (producto.imagen) {
-            producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
+            producto.imagen = asset(producto.imagen);
         }
 
-        res.json(producto);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Hubo un error');
-    }
-};
-
-// Actualizar el estado de un producto
-exports.cambiarEstadoProducto = async (req, res) => {
-    try {
-        let producto = await Producto.findById(req.params.id);
-
-        if (!producto) {
-            return res.status(404).json({ msg: 'No existe el producto' });
-        }
-
-        producto.estado = req.body.estado || 'inactivo';
-
-        producto = await Producto.findByIdAndUpdate({ _id: req.params.id }, producto, { new: true }).populate('categoria');
         res.json(producto);
     } catch (error) {
         console.error(error);
@@ -182,14 +165,31 @@ exports.eliminarProducto = async (req, res) => {
             return res.status(404).json({ msg: 'No existe el producto' });
         }
 
-        // Cambiar el estado del producto a 'inactivo'
         producto.estado = 'inactivo';
-        producto.fechaEliminacion = new Date(); // Opcional: Puedes añadir una fecha de eliminación
+        producto.fechaEliminacion = new Date();
 
-        // Guardar los cambios
         await producto.save();
 
         res.json({ msg: 'Producto marcado como inactivo con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Hubo un error');
+    }
+};
+
+// Actualizar el estado de un producto
+exports.cambiarEstadoProducto = async (req, res) => {
+    try {
+        let producto = await Producto.findById(req.params.id);
+
+        if (!producto) {
+            return res.status(404).json({ msg: 'No existe el producto' });
+        }
+
+        producto.estado = req.body.estado || 'inactivo';
+
+        producto = await Producto.findByIdAndUpdate({ _id: req.params.id }, producto, { new: true }).populate('categoria');
+        res.json(producto);
     } catch (error) {
         console.error(error);
         res.status(500).send('Hubo un error');
