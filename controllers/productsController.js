@@ -1,12 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 const Producto = require('../models/product');
-require('dotenv').config({ path: 'variables.env' });
-
-// Función para construir la URL completa de la imagen
-const asset = (path) => {
-    return `${process.env.BASE_URL}${path}`;
-};
 
 // Obtener un producto por ID
 exports.obtenerProducto = async (req, res) => {
@@ -17,9 +11,9 @@ exports.obtenerProducto = async (req, res) => {
             return res.status(404).json({ msg: 'No existe el producto' });
         }
 
-        // Convertir la ruta de la imagen a una URL completa
+        // Dejar la ruta de la imagen tal como está
         if (producto.imagen) {
-            producto.imagen = asset(producto.imagen);
+            producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
         }
 
         res.json(producto);
@@ -29,16 +23,15 @@ exports.obtenerProducto = async (req, res) => {
     }
 };
 
-
 // Obtener todos los productos
 exports.obtenerProductos = async (req, res) => {
     try {
         const productos = await Producto.find({ estado: 'activo' }).populate('categoria');
 
-        // Convertir las rutas de las imágenes a URLs completas
+        // Dejar las rutas de las imágenes tal como están
         const productosConUrl = productos.map(producto => {
             if (producto.imagen) {
-                producto.imagen = asset(producto.imagen);
+                producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
             }
             return producto;
         });
@@ -85,9 +78,9 @@ exports.crearProducto = async (req, res) => {
 
         await producto.save();
 
-        // Añadir la URL completa de la imagen
+        // Dejar la URL de la imagen tal como está
         if (producto.imagen) {
-            producto.imagen = asset(producto.imagen);
+            producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
         }
 
         res.status(201).json(producto);
@@ -120,9 +113,9 @@ exports.actualizarProducto = async (req, res) => {
 
         producto = await Producto.findByIdAndUpdate(req.params.id, producto, { new: true }).populate('categoria');
 
-        // Añadir la URL completa de la imagen
+        // Dejar la URL de la imagen tal como está
         if (producto.imagen) {
-            producto.imagen = asset(producto.imagen);
+            producto.imagen = producto.imagen; // Si no usas asset, simplemente deja la ruta
         }
 
         res.json(producto);
@@ -170,7 +163,11 @@ exports.actualizarStockProducto = async (req, res) => {
         producto.estado = producto.cantidad === 0 ? 'agotado' : 'activo';
 
         producto = await Producto.findByIdAndUpdate({ _id: req.params.id }, producto, { new: true }).populate('categoria');
-        res.json(producto);
+        res.json({
+            mensaje: 'Stock actualizado',
+            cantidadAnterior: producto.cantidad - cantidad,
+            cantidadNueva: producto.cantidad
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send('Hubo un error');
