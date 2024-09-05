@@ -5,9 +5,11 @@ const Producto = require('../models/product');
 // URL base para las imágenes
 const BASE_URL = 'https://sgacineteca-production.up.railway.app';
 
+// Imagen por defecto
+const IMAGEN_POR_DEFECTO = '/images/productos/1725509643421-descarga1.jpeg';
+
 // Función auxiliar para construir la URL de la imagen
 const asset = (imagePath) => {
-    // Elimina cualquier duplicado de '/images/productos/' en la ruta
     return imagePath ? `${BASE_URL}${imagePath.replace(/\/+images\/productos\//, '/images/productos/')}` : null;
 };
 
@@ -66,10 +68,8 @@ exports.crearProducto = async (req, res) => {
             return res.status(400).json({ msg: 'Todos los campos son requeridos' });
         }
 
-        let imagenPath = '';
-        if (req.file) {
-            imagenPath = `/images/productos/${req.file.filename}`;
-        }
+        // Si no se subió una imagen, asignar la imagen por defecto
+        let imagenPath = req.file ? `/images/productos/${req.file.filename}` : IMAGEN_POR_DEFECTO;
 
         const producto = new Producto({
             nombre,
@@ -83,6 +83,7 @@ exports.crearProducto = async (req, res) => {
 
         await producto.save();
 
+        // Asignar la URL completa de la imagen
         if (producto.imagen) {
             producto.imagen = asset(producto.imagen);
         }
@@ -104,9 +105,8 @@ exports.actualizarProducto = async (req, res) => {
             return res.status(404).json({ msg: 'Producto no encontrado' });
         }
 
-        if (req.file) {
-            producto.imagen = `/images/productos/${req.file.filename}`;
-        }
+        // Si no se subió una nueva imagen, mantener la imagen actual o asignar la imagen por defecto
+        producto.imagen = req.file ? `/images/productos/${req.file.filename}` : producto.imagen || IMAGEN_POR_DEFECTO;
 
         producto.nombre = nombre || producto.nombre;
         producto.categoria = categoria || producto.categoria;
@@ -117,6 +117,7 @@ exports.actualizarProducto = async (req, res) => {
 
         producto = await Producto.findByIdAndUpdate(req.params.id, producto, { new: true }).populate('categoria');
 
+        // Asignar la URL completa de la imagen
         if (producto.imagen) {
             producto.imagen = asset(producto.imagen);
         }
