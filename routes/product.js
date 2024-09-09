@@ -34,11 +34,11 @@ const uploadProductos = multer({
 });
 
 // Rutas para productos
-router.get('/', productoController.obtenerProductos);
+router.get('/', productoController.obtenerTodosLosProductos);
+router.get('/cart-view', productoController.obtenerProductosParaVenta);
 router.get('/:id', productoController.obtenerProducto);
 router.post('/', verifyToken, uploadProductos.single('imagen'), productoController.crearProducto);
 router.put('/:id', verifyToken, uploadProductos.single('imagen'), productoController.actualizarProducto);
-router.patch('/:id/estado', verifyToken, productoController.cambiarEstadoProducto);
 router.patch('/stock/:id', verifyToken, productoController.actualizarStockProducto);
 router.delete('/:id', verifyToken, productoController.eliminarProducto);
 

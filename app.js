@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 // Habilitar CORS
-app.use(cors());
+app.use(cors({ origin: 'https://find-develop.netlify.app'}));
 
 // Definir rutas
 app.use('/api/auth', require('./routes/auth'));

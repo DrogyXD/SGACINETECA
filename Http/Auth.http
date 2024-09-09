@@ -1,0 +1,8 @@
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+# x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTUxMTQ1MiwiZXhwIjoxNzI1NTY5MDUyfQ.YoaOtTmMdOIUIpPyvMcTZrVXONvbmdUWI8nsOiCgTkA
+
+{
+    "email":"prueba2.admin@gmail.com",
+    "password":"987654321"
+}

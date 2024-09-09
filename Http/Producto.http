@@ -1,0 +1,11 @@
+curl POST https://localhost:4000/api/productos
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDkxYWE5YmJiY2FiOGExNGU1MjY0OSIsImlhdCI6MTcyNTc0MzEwMSwiZXhwIjoxNzI1ODAwNzAxfQ.RNghhVfOoa8oOhPasQYeuQV2JOTWAtY_LZHYhyoFQ3w
+Content-Type: multipart/form-data
+{
+    "nombre"= "Palomitas Chicas"
+    "categoria"="66d929446f1a837b97a49f96"
+    "precioCompra"=100
+    "precioVenta"=150
+    "cantidad"=10
+    "descripcion"=Descripción del producto
+}
