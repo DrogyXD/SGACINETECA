@@ -3,7 +3,7 @@ const fs = require('fs');
 const Producto = require('../models/product');
 
 // URL base para las imágenes
-const BASE_URL = 'http://localhost:4000';
+const BASE_URL = 'https://sgacineteca-production.up.railway.app';
 
 // Imagen por defecto
 const IMAGEN_POR_DEFECTO = '/images/productos/1725509643421-descarga1.jpeg';
